@@ -10,6 +10,7 @@ contract DLibrary {
         address payable uploader;
         string bookIpfsHash;
         address payable currentOwner;
+        bool avail;       // If it is available at the moment
       
     }
     
@@ -20,23 +21,23 @@ contract DLibrary {
     
     address payable public currentUser = msg.sender;
     
-   
 
   event BookAdded(
-    uint bookID,
+   uint bookID,
    string name,
    string author,
    address payable uploader,
    string bookIpfsHash,
-   address payable currentOwner
+   address payable currentOwner,
+   bool avail
   );
     
     function addBook(string memory _name,string memory _author,address payable _uploader,string memory _bookIpfsHash) public{
         require(msg.sender!=address(0));  // msg.sender is the one adding a book
        numOfBooks++;
-       allBooksAvailable[numOfBooks]=Book(numOfBooks,_name,_author,_uploader,_bookIpfsHash,address(0));
+       allBooksAvailable[numOfBooks]=Book(numOfBooks,_name,_author,_uploader,_bookIpfsHash,address(0),true);
         
-        emit BookAdded(numOfBooks,_name,_author,msg.sender,_bookIpfsHash,address(0));
+        emit BookAdded(numOfBooks,_name,_author,msg.sender,_bookIpfsHash,address(0),true);
     
     }
     
@@ -51,7 +52,7 @@ contract DLibrary {
   
         numOfRentedBooks++;
   
-            numOfBooks--;
+         // numOfBooks--;
          //   rentedBooks[currentUser.numOfPossessions] = allBooksAvailable[_bookID];
             Book memory rentedBook;
             rentedBook.bookID=_bookID;
@@ -60,14 +61,16 @@ contract DLibrary {
             rentedBook.uploader=allBooksAvailable[_bookID].uploader;
             rentedBook.bookIpfsHash=allBooksAvailable[_bookID].bookIpfsHash;
             rentedBook.currentOwner=msg.sender;
+        //    rentedBook.avail=false;
             
             allBooksRented[numOfRentedBooks] = rentedBook;
   
         
         for(uint i=1;i<=numOfBooks;i++){
             if(allBooksAvailable[i].bookID==_bookID){
-                delete(allBooksAvailable[i]);
-                break;
+                allBooksAvailable[i].avail=false;
+               // delete(allBooksAvailable[i]);
+               // break;
             }
         }
        

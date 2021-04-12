@@ -1,44 +1,65 @@
 import React, { Component } from 'react';
-import Identicon from 'identicon.js';
-import {Button,Dialog,DialogActions,DialogContent,DialogTitle,Typography} from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import { colours } from '../components/colours';
+import { Button } from '@material-ui/core';
 
+const styles = () => ({
+  main: {
+    backgroundColor: colours.books
+  },
+  heading: {
+    color: colours.text,
+    fontSize: 30,
+    padding: '1%',
+    fontWeight: 'bold'
+  },
+  button: {
+    marginTop: '1%',
+    backgroundColor: colours.text,
+    color: 'white',
+    margin: '1%',
+    fontWeight: 'bold'
+
+  },
+
+
+})
 class Navbar extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state={
-      dialogOpen : false
+    this.state = {
+      dialogOpen: false
     }
-    
+
   }
 
   render() {
-    
+    const { classes } = this.props;
+
     return (
- 
-     <nav style={{alignItems:'center',padding:'1%',fontSize:20,backgroundColor:'#985F34',fontWeight:'bold',color:'white'}}>Decentralized Library
-       
-        <ul className="navbar-nav px-3">
-          <li>
-            <small id="account">
-              <a target="_blank"
-                 alt=""
-                 style={{color:'#43493D'}}
-                // className="text-white"
-                 rel="noopener noreferrer"
-                 href={"https://etherscan.io/address/" + this.props.account}>
-                You:{this.props.account}
-              </a>
-              <div>
-        <Button onClick={this.props.onClick} style={{alignSelf:'flex-end'}} variant="contained">My Books</Button>
-      
+
+      <div className={classes.main}>
+        <h2 className={classes.heading}>Decentralized Library</h2>
+
+
+
+        <a target="_blank"
+          alt=""
+          style={{ color: colours.gray, fontSize: 15, padding: '1%', fontWeight: 'bold' }}
+          // className="text-white"
+          rel="noopener noreferrer"
+          href={"https://etherscan.io/address/" + this.props.account}>
+          You: {this.props.account}
+        </a>
+        <div>
+          <Button className={classes.button} variant="contained" onClick={this.props.onClick} variant="contained">My Books</Button>
+
         </div>
-            </small>
-           
-          </li>
-        </ul>
-      </nav>
+
+
+      </div>
     );
   }
 }
 
-export default Navbar;
+export default withStyles(styles)(Navbar);
